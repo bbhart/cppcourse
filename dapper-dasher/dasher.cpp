@@ -9,13 +9,6 @@ int main() {
     int frameCounter{ 0 };
     SetTargetFPS(60);
 
-    // rectangle
-    const int width{ 50 };
-    const int height { 80 };
-
-    int posX{ (WINDOW_HEIGHT / 2) - (width / 2) }; // Center on X
-    int posY{ WINDOW_HEIGHT - height }; // bottom
-
     // physics
     float velocityY { 0.0 };
     bool isInAir {}; // empty braces means false
@@ -23,9 +16,10 @@ int main() {
     // sprite
     Texture2D scarfy = LoadTexture("textures/scarfy.png");
     Rectangle scarfyRec{ 0.0, 0.0, (float)scarfy.width / 6, (float)scarfy.height };  // 6 sprites in texture
-    Vector2 scarfyPos{ posX, WINDOW_HEIGHT - scarfy.height};
+    Vector2 scarfyPos{ WINDOW_WIDTH/2 - (scarfy.width/6)/2, WINDOW_HEIGHT - scarfy.height};
     int spriteIndex{ 0 };
 
+    // game loop
     while(!WindowShouldClose())
     {
         BeginDrawing();
@@ -48,7 +42,7 @@ int main() {
                 spriteIndex++;
             }
         }
-        
+    
         if (isInAir) {
             // apply gravity
             velocityY += (24.0 / 60);
@@ -59,15 +53,12 @@ int main() {
             velocityY = 0.0;
         } 
         
-        // DrawRectangle(posX, posY, width, height, BLUE);
-
         if (IsKeyPressed(KEY_SPACE) && !isInAir)
         {
             velocityY += -12.0;            
         }
 
-        // apply velocities
-        // posY += (int)velocityY;
+        // apply velocity
         scarfyPos.y += (int)velocityY;
 
         DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
@@ -76,6 +67,7 @@ int main() {
         EndDrawing();
 
     }
+    UnloadTexture(scarfy);
     CloseWindow();
 
 
